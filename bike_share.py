@@ -19,4 +19,4 @@ print(y_output)
 plt.plot(X_test, y_output)
 plt.show();
 plt.plot(X_test, y_test)
-plt.show()
+plt.show();
