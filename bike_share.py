@@ -4,32 +4,44 @@ import matplotlib.pyplot as plt
 
 import csv
 
-test_datum = []
-training_datum = np.array([])
-y_training_datum = np.array([])
-y_test_datum = np.array([])
+test_datum = [] #[[] for _ in range(400)]
+training_datum =[]# [[] for _ in range(400)]
+y_training_datum =[]# [[] for _ in range(400)]
+y_test_datum = []#[[] for _ in range(400)]
 
 with open('./data_set/day.csv', 'r') as days:
     days_reader = csv.DictReader(days)
     for row in days_reader:
-        data = row['instant'], row['dteday'], row['season'], row['atemp'], row['yr']
-        count_data = row['yr'], row['cnt']
+        data = row['season'], row['yr']
+        count_data =  row['cnt'],row['yr']
 
-        if data[4] == '0':
-            #training_datum.append(data*5)
-            #training_datum = np.concatenate((training_datum, data),axis = 0)
+        if data[1] == '0':
+            training_datum.append(data)
+            #training_datum = np.append(data[0])#data[0]# np.concatenate((training_datum, data[0]),axis = 0)
 
         else:
-            test_datum = np.concatenate((test_datum, data), axis=0)
+            #test_datum = data[0]#np.concatenate((test_datum, data[0]), axis=0)
+            test_datum.append(data)
 
-        if count_data[0] == '0':
-            y_training_datum = np.concatenate((y_training_datum, count_data), axis=0)
+        if count_data[1] == '0':
+            #y_training_datum = count_data[0]#np.concatenate((y_training_datum, count_data[0]), axis=0)
+            y_training_datum.append(count_data)
         else:
-            y_test_datum = np.concatenate((y_test_datum, count_data),axis=0)
+            #y_test_datum = count_data[0]# np.concatenate((y_test_datum, count_data[0]),axis=0)
+            y_test_datum.append(count_data)
 
-final_train_data = training_datum[1]
 
-print(y_training_datum)
+training_datum_array = np.asarray(training_datum)
+training_datum_array = training_datum_array.astype(np.float)
+y_training_datum_array = np.asarray(y_training_datum)
+y_training_datum_array = y_training_datum_array.astype(np.float)
+
+# print(training_datum_array.shape)
+# print(test_datum_array.shape)
+# print(training_datum_array)
+# print(test_datum_array)
+
+
 
 nn = Regressor(layers=[Layer("Rectifier", units=100), Layer("Linear")]
                 , warning=None, parameters=None, random_state=None, learning_rule=u'sgd', learning_rate=0.5,
@@ -37,7 +49,7 @@ nn = Regressor(layers=[Layer("Rectifier", units=100), Layer("Linear")]
                batch_size=1, n_iter=None, n_stable=10, f_stable=0.001, valid_set=None, valid_size=0.0, loss_type=None,
                callback=None, debug=False, verbose=None)
 
-# nn.fit(training_datum, y_training_datum)
+nn.fit(training_datum_array, y_training_datum_array)
 # y_output = nn.predict(training_datum)
 # print(y_output)
 #plt.plot(X_test, y_output)
