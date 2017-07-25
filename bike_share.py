@@ -41,6 +41,12 @@ y_training_datum_array = y_training_datum_array.astype(np.float)
 # print(training_datum_array)
 # print(test_datum_array)
 
+# print(test_datum)
+
+test_datum_array = np.asarray(test_datum)
+test_datum_array = test_datum_array.astype(np.float)
+y_test_datum_array = np.asarray(y_test_datum)
+y_test_datum_array = y_test_datum_array.astype(np.float)
 
 
 nn = Regressor(layers=[Layer("Rectifier", units=100), Layer("Linear")]
@@ -50,9 +56,16 @@ nn = Regressor(layers=[Layer("Rectifier", units=100), Layer("Linear")]
                callback=None, debug=False, verbose=None)
 
 nn.fit(training_datum_array, y_training_datum_array)
-# y_output = nn.predict(training_datum)
-# print(y_output)
-#plt.plot(X_test, y_output)
-#plt.show();
-#plt.plot(X_test, y_test)
-#plt.show();
+
+
+y_output = nn.predict(test_datum_array)
+print(y_output)
+
+print("\n\n")
+
+print(y_test_datum_array)
+
+# plt.plot(test_datum_array[0], y_output[0])
+# plt.show();
+# plt.plot(test_datum_array[0], y_test_datum_array[0])
+# plt.show();
