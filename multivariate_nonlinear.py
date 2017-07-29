@@ -7,6 +7,7 @@ from sknn.mlp import Regressor, Layer
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
+import matplotlib.patches as mpatches
 
 def print_array(arrays):
     for array in arrays:
@@ -74,7 +75,7 @@ training_counts = standardize(y_training_datum, 0)
 
 nn = Regressor(
     layers=[
-        Layer("Sigmoid", units = 50),
+        Layer("Sigmoid", units = 28),
         Layer("Linear", units = 5),
         Layer("Linear", units = 1)],
     learning_rate=0.000005,
@@ -115,4 +116,9 @@ plt.suptitle('Multivariate Non Linear Regression')
 
 plt.plot(testing_atemp, actual_ouput, 'ro')
 plt.plot(testing_atemp, predicted_output, 'bo')
+
+red_patch = mpatches.Patch(color='red', label='Actual')
+blue_patch = mpatches.Patch(color='blue', label='Predicted')
+plt.legend(handles=[red_patch, blue_patch])
+
 plt.show()
