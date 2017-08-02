@@ -50,21 +50,21 @@ y_test_datum_array = y_test_datum_array.astype(np.float)
 
 
 
-training_seasons = np.asarray(training_datum_array[:,0])
+training_atemp = np.asarray(training_datum_array[:, 0])
 training_counts = np.asarray(y_training_datum_array[:,0])
 
 
-training_seasons = np.array([[training_season] for training_season in training_seasons])
+training_atemp = np.array([[training_season] for training_season in training_atemp])
 training_counts = np.array([[training_count] for training_count in training_counts])
 
 
-testing_seasons  = np.asarray(test_datum_array[:,0])
+testing_atemp  = np.asarray(test_datum_array[:, 0])
 testing_counts = np.asarray(y_test_datum_array[:,0])
 
-training_seasons_mean = np.mean(training_seasons)
-normalize_training_seasons = (max(training_seasons)- min(training_seasons))
+training_atemp_mean = np.mean(training_atemp)
+normalize_training_atemp = (max(training_atemp) - min(training_atemp))
 
-training_seasons = training_seasons - training_seasons_mean/normalize_training_seasons
+training_atemp = training_atemp - training_atemp_mean / normalize_training_atemp
 
 
 training_counts_mean = np.mean(training_counts)
@@ -73,13 +73,13 @@ normalize_training_counts = (max(training_counts)-min(training_counts))
 training_counts = training_counts- training_counts_mean/normalize_training_counts
 
 
-testing_seasons = np.array([[testing_season] for testing_season in testing_seasons])
+testing_atemp = np.array([[testing_season] for testing_season in testing_atemp])
 testing_counts  = np.array([[testing_count] for testing_count in testing_counts])
 
-normalize_testing_seasons = (max(testing_seasons)- min(testing_seasons))
-mean_testing_seasons = np.mean(testing_seasons)
+normalize_testing_atemp = (max(testing_atemp) - min(testing_atemp))
+mean_testing_atemp = np.mean(testing_atemp)
 
-testing_seasons = testing_seasons - mean_testing_seasons/normalize_testing_seasons
+testing_atemp = testing_atemp - mean_testing_atemp / normalize_testing_atemp
 
 normalize_testing_counts = (max(testing_counts)-min(testing_counts))
 mean_testing_counts = np.mean(testing_counts)
@@ -90,20 +90,20 @@ svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.1)
 svr_lin = SVR(kernel='linear', C=1e3)
 svr_poly = SVR(kernel='poly', degree=3, gamma='auto', coef0=0.8, tol=0.0075, C=1e10, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
 
-y_rbf = svr_rbf.fit(training_seasons, training_counts).predict(testing_seasons)
-y_lin = svr_lin.fit(training_seasons, training_counts).predict(testing_seasons)
-y_poly = svr_poly.fit(training_seasons, training_counts).predict(testing_seasons)
+y_rbf = svr_rbf.fit(training_atemp, training_counts).predict(testing_atemp)
+y_lin = svr_lin.fit(training_atemp, training_counts).predict(testing_atemp)
+y_poly = svr_poly.fit(training_atemp, training_counts).predict(testing_atemp)
 
 lw = 2
 
 # testing_counts =( testing_counts * normalize_testing_counts)+mean_testing_counts
 # testing_seasons = ( testing_seasons * normalize_testing_seasons)+mean_testing_seasons
 #
-plt.scatter(testing_seasons, testing_counts, color='darkorange', label='data')
+plt.scatter(testing_atemp, testing_counts, color='darkorange', label='data')
 plt.hold('on')
 # plt.plot(testing_seasons, y_rbf, color='navy', lw=lw, label='RBF model')
 # plt.plot(testing_seasons, y_lin, color='c', lw=lw, label='Linear model')
-plt.plot(testing_seasons, y_poly, color='cornflowerblue', lw=lw, label='Polynomial model')
+plt.plot(testing_atemp, y_poly, color='cornflowerblue', lw=lw, label='Polynomial model')
 plt.xlabel('data')
 plt.ylabel('target')
 plt.title('Support Vector Regression')
