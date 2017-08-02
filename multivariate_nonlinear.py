@@ -88,7 +88,7 @@ training_counts = normalize(training_counts)
 testing_atemp = normalize(testing_atemp)
 testing_counts = normalize(testing_counts)
 
-svr_poly = SVR(kernel='sigmoid', degree=3, gamma='auto', coef0=0.75, tol=0.0075, C=1e3, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
+svr_poly = SVR(kernel='poly', degree=3, gamma='auto', coef0=0.75, tol=0.0075, C=1e10, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
 # y_poly = svr_poly.fit(training_atemp, training_counts).predict(testing_atemp)
 y_poly = svr_poly.fit(training_datum[:,:3], training_counts).predict(test_datum[:,:3])
 
@@ -99,7 +99,7 @@ plt.hold('on')
 # testing_atemp = destandardize(training_datum, 0)
 # y_poly = (y_poly * (max(y_poly) - min(y_poly))) + np.mean(y_poly)
 
-plt.plot(testing_atemp, y_poly, color='blue', label='Polynomial model')
+plt.scatter(testing_atemp, y_poly, color='blue', label='Polynomial model')
 plt.title('Multivariate Non Linear')
 plt.xlabel('Average Temperature')
 plt.ylabel('Count of Bikes Rented')
