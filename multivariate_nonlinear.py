@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 import matplotlib.patches as mpatches
+from sklearn.svm import SVR
 
 def print_array(arrays):
     for array in arrays:
@@ -23,7 +24,7 @@ def print_array_shapes(arrays):
 def standardize(array, index):
     base_array = np.asarray(array[:, index])
     base_array = np.array([[elements] for elements in base_array])
-    base_array = (base_array - np.mean(base_array)) / (max(base_array) - min(base_array))
+    # base_array = (base_array - np.mean(base_array)) / (max(base_array) - min(base_array))
     return base_array
 
 
@@ -32,6 +33,13 @@ def destandardize(array, index):
     base_array = np.array([[elements] for elements in base_array])
     base_array = (base_array * (max(base_array) - min(base_array))) + np.mean(base_array)
     return base_array
+
+def normalize(array):
+    array_mean = np.mean(array)
+    normalize_array_atemp = (max(array) - min(array))
+    array = array - array_mean / normalize_array_atemp
+    return array
+
 
 def parse_data():
     with open('./data_set/day.csv', 'r') as days:
@@ -69,56 +77,32 @@ def parse_data():
 training_datum, y_training_datum, test_datum, y_test_datum = parse_data()
 
 training_atemp = standardize(training_datum, 0)
-training_hum = standardize(training_datum, 1)
-training_ws = standardize(training_datum, 2)
 training_counts = standardize(y_training_datum, 0)
 
-nn = Regressor(
-    layers=[
-        Layer("Sigmoid", units = 28),
-        Layer("Linear", units = 5),
-        Layer("Linear", units = 1)],
-    learning_rate=0.000005,
-    n_iter=2000)
-
-
-# nn = Regressor( # Vishaka- reason for change -https://www.researchgate.net/post/why_the_prediction_or_the_output_of_neural_network_does_not_change_during_the_test_phase
-#     layers=[
-#         Layer("Sigmoid", units=50), #28 was optimum,
-#         Layer("Linear", units = 5),#5
-#        # Layer("Linear", units = 4),#5 was optimum
-#         Layer("Linear", units = 1 )],
-#     learning_rate=0.0000005,
-#     n_iter=2000)
-
-nn.fit(training_datum[:,:3], y_training_datum[:,0])
-
 testing_atemp = standardize(test_datum, 0)
-testing_hum = standardize(test_datum, 1)
-testing_ws = standardize(test_datum, 2)
 testing_counts = standardize(y_test_datum, 0)
 
-y_output = nn.predict(test_datum[:,:3])
+training_temp = normalize(training_atemp)
+training_counts = normalize(training_counts)
 
-predicted_output = destandardize(y_output, 0)
-actual_ouput = destandardize(y_test_datum, 0)
+testing_atemp = normalize(testing_atemp)
+testing_counts = normalize(testing_counts)
 
-testing_atemp = destandardize(testing_atemp, 0)
+svr_poly = SVR(kernel='sigmoid', degree=3, gamma='auto', coef0=0.75, tol=0.0075, C=1e3, epsilon=0.1, shrinking=True, cache_size=200, verbose=False, max_iter=-1)
+# y_poly = svr_poly.fit(training_atemp, training_counts).predict(testing_atemp)
+y_poly = svr_poly.fit(training_datum[:,:3], training_counts).predict(test_datum[:,:3])
 
-# fig, axis = plt.subplots(figsize=(6, 6))
-# axis.set_title('Bike Count'.format('seaborn'), color = 'green')
-#
-# plt.plot(testing_atemp, testing_counts, 'ro', color='blue', label ='Test data')
 
+plt.scatter(testing_atemp, testing_counts, color='red', label='data')
+plt.hold('on')
+
+# testing_atemp = destandardize(training_datum, 0)
+# y_poly = (y_poly * (max(y_poly) - min(y_poly))) + np.mean(y_poly)
+
+plt.plot(testing_atemp, y_poly, color='blue', label='Polynomial model')
+plt.title('Multivariate Non Linear')
 plt.xlabel('Average Temperature')
 plt.ylabel('Count of Bikes Rented')
-plt.suptitle('Multivariate Non Linear Regression')
 
-plt.plot(testing_atemp, actual_ouput, 'ro')
-plt.plot(testing_atemp, predicted_output, 'bo')
-
-red_patch = mpatches.Patch(color='red', label='Actual')
-blue_patch = mpatches.Patch(color='blue', label='Predicted')
-plt.legend(handles=[red_patch, blue_patch])
-
+plt.legend()
 plt.show()

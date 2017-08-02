@@ -66,7 +66,6 @@ normalize_training_atemp = (max(training_atemp) - min(training_atemp))
 
 training_atemp = training_atemp - training_atemp_mean / normalize_training_atemp
 
-
 training_counts_mean = np.mean(training_counts)
 normalize_training_counts = (max(training_counts)-min(training_counts))
 
@@ -99,11 +98,11 @@ lw = 2
 # testing_counts =( testing_counts * normalize_testing_counts)+mean_testing_counts
 # testing_seasons = ( testing_seasons * normalize_testing_seasons)+mean_testing_seasons
 #
-plt.scatter(testing_atemp, testing_counts, color='darkorange', label='data')
+plt.scatter(testing_atemp, testing_counts, color='red', label='data')
 plt.hold('on')
 # plt.plot(testing_seasons, y_rbf, color='navy', lw=lw, label='RBF model')
 # plt.plot(testing_seasons, y_lin, color='c', lw=lw, label='Linear model')
-plt.plot(testing_atemp, y_poly, color='cornflowerblue', lw=lw, label='Polynomial model')
+plt.plot(testing_atemp, y_poly, color='blue', lw=lw, label='Polynomial model')
 plt.xlabel('data')
 plt.ylabel('target')
 plt.title('Support Vector Regression')
