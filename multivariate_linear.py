@@ -102,7 +102,7 @@ plt.hold('on')
 # y_poly = (y_poly * (max(y_poly) - min(y_poly))) + np.mean(y_poly)
 
 plt.scatter(testing_atemp, y_poly, color='blue', label='Polynomial model')
-plt.title('Multivariate Non Linear')
+plt.title('Multivariate Linear')
 plt.xlabel('Average Temperature')
 plt.ylabel('Count of Bikes Rented')
 
