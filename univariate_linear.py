@@ -91,18 +91,18 @@ svr_poly = SVR(kernel='poly', degree=3, gamma='auto', coef0=0.8, tol=0.0075, C=1
 
 y_rbf = svr_rbf.fit(training_atemp, training_counts).predict(testing_atemp)
 y_lin = svr_lin.fit(training_atemp, training_counts).predict(testing_atemp)
-y_poly = svr_poly.fit(training_atemp, training_counts).predict(testing_atemp)
+# y_poly = svr_poly.fit(training_atemp, training_counts).predict(testing_atemp)
 
 lw = 2
 
 # testing_counts =( testing_counts * normalize_testing_counts)+mean_testing_counts
 # testing_seasons = ( testing_seasons * normalize_testing_seasons)+mean_testing_seasons
 #
-plt.scatter(testing_atemp, testing_counts, color='red', label='data')
+plt.scatter(testing_atemp, testing_counts, color='red', label='Actual')
 plt.hold('on')
 # plt.plot(testing_seasons, y_rbf, color='navy', lw=lw, label='RBF model')
 # plt.plot(testing_seasons, y_lin, color='c', lw=lw, label='Linear model')
-plt.scatter(testing_atemp, y_poly, color='blue', lw=lw, label='Polynomial model')
+plt.scatter(testing_atemp, y_lin, color='blue', lw=lw, label='Predicted')
 plt.xlabel('Temperature')
 plt.ylabel('Count of Bikes Rented')
 plt.title('Univariate Linear')

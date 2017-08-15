@@ -95,13 +95,13 @@ svr_poly = SVR(kernel='linear', C=1e2)
 y_poly = svr_poly.fit(training_datum[:,:3], training_counts).predict(test_datum[:,:3])
 
 
-plt.scatter(testing_atemp, testing_counts, color='red', label='data') # changed from plot to scatter - Vishaka
+plt.scatter(testing_atemp, testing_counts, color='red', label='Actual') # changed from plot to scatter - Vishaka
 plt.hold('on')
 
 # testing_atemp = destandardize(training_datum, 0)
 # y_poly = (y_poly * (max(y_poly) - min(y_poly))) + np.mean(y_poly)
 
-plt.scatter(testing_atemp, y_poly, color='blue', label='Polynomial model')
+plt.scatter(testing_atemp, y_poly, color='blue', label='Predicted')
 plt.title('Multivariate Linear')
 plt.xlabel('Average Temperature')
 plt.ylabel('Count of Bikes Rented')
